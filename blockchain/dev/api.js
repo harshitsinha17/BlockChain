@@ -8,7 +8,7 @@ app.use(bodyParser.urlencoded( {extended:false} ));
 const Blockchain = require('./blockchain');
 const bitcoin = new Blockchain();
 
-const uuid = require('uuid/v1');
+const {uuid} = require('uuidv4');
 const nodeAddress = uuid().split('-').join('');
  
 app.get('/', function (req, res) {
@@ -35,9 +35,10 @@ app.get('/mine', function(req, res){
   }
   const nonce = bitcoin.proofOfWork(previousBlockHash, currentData);
   const hash = bitcoin.hash(nonce, currentData, previousBlockHash);
-  const newBlock = bitcoin.createNewBlock(nonce, previousBlockHash, hash);
+
 
   bitcoin.createNewTransactions("12.5","00", nodeAddress);
+  const newBlock = bitcoin.createNewBlock(nonce, previousBlockHash, hash);
 
   res.json(
     {
